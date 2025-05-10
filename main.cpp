@@ -1,23 +1,27 @@
-/* mbed Microcontroller Library
- * Copyright (c) 2019 ARM Limited
- * SPDX-License-Identifier: Apache-2.0
- */
-
+#include "DigitalOut.h"
+#include "PinNamesTypes.h"
 #include "mbed.h"
-#include "platform/mbed_thread.h"
 
-// Blinking rate in milliseconds
-#define BLINKING_RATE_MS   500
-
-
+// main() runs in its own thread in the OS
 int main()
 {
-    // Initialise the digital pin LED1 as an output
-    DigitalOut led(LED1);
-    while (true) {
-        if(int i = 0;i < 4){
-        led = !led;
+    PwmOut servo(PC_8);
+    DigitalOut lim(PB_7, PullDown);
+
+    servo.period_us(5096);
+
+    servo.pulsewidth_us(500);
+    bool flag = true;
+
+
+
+    while(true){
+        wait_ms(50);
+        if (!lim.read() && flag){
+            servo.pulsewidth_us(1500);
+            flag =false;
+            printf("h");
         }
-        thread_sleep_for(BLINKING_RATE_MS);
+        printf("%d\n",!lim.read());
     }
 }
